@@ -33,27 +33,27 @@ public class UsersRepository implements IUsersRepository {
     @Override
     public List<User> findAll() {
         //language=sql
-        final String SELECT_ALL_USERS = "select * from task_user";
+        final String SELECT_ALL_USERS = "select * from users";
         return jdbcTemplate.query(SELECT_ALL_USERS, userRowMapper);
     }
 
     @Override
     public void save(User user) {
         //language=sql
-        final String INSERT_USER = "insert into task_user(email, name, password_hash) values (?,?,?)";
+        final String INSERT_USER = "insert into users(email, name, password_hash) values (?,?,?)";
         jdbcTemplate.update(INSERT_USER, user.getEmail(), user.getName(), user.getPasswordHash());
     }
 
     @Override
     public User find(int id) {
         //language=sql
-        final String SELECT_USER_BY_ID = "select * from task_user where id = ?";
+        final String SELECT_USER_BY_ID = "select * from users where id = ?";
         return jdbcTemplate.queryForObject(SELECT_USER_BY_ID, userRowMapper, id);
     }
 
     public User findByEmail(String email) {
         //language=sql
-        final String SELECT_BY_EMAIL = "select * from task_user where email = ?";
+        final String SELECT_BY_EMAIL = "select * from users where email = ?";
 
         User user = jdbcTemplate.queryForObject(SELECT_BY_EMAIL, userRowMapper, email);
         return user;
@@ -71,7 +71,7 @@ public class UsersRepository implements IUsersRepository {
 
     public void changeRoleToAdmin(int id) {
         //language=sql
-        final String UPDATE_ROLE = "update task_user set is_admin = true where id = ?";
+        final String UPDATE_ROLE = "update users set is_admin = true where id = ?";
         jdbcTemplate.update(UPDATE_ROLE, id);
     }
 }

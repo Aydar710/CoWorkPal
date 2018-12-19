@@ -32,8 +32,8 @@
 
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Участники</a></li>
-                <li><a href="/startProject">Задачи</a></li>
+                <%--<li><a href="/members">Участники</a></li>
+                <li><a href="/startProject">Задачи</a></li>--%>
             </ul>
         </div>
 

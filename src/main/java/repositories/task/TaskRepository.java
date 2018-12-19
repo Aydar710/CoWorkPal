@@ -33,7 +33,7 @@ public class TaskRepository implements ITaskRepository {
     @Override
     public void save(Task task) {
         //language=sql
-        final String INSERT_TASK = "insert into task(task, project_id) ";
+        final String INSERT_TASK = "insert into task(task, project_id) values (?, ?)";
         jdbcTemplate.update(INSERT_TASK, task.getTask(), task.getProject().getId());
     }
 
@@ -42,5 +42,18 @@ public class TaskRepository implements ITaskRepository {
         //language=sql
         final String SELECT_TASK_BY_ID = "select * from task where id = ?";
         return jdbcTemplate.queryForObject(SELECT_TASK_BY_ID, taskRowMapper, id);
+    }
+
+    public List<Task> getAllByProjectId(int projectId) {
+        //language=sql
+        final String SELECT_ALL_PROJECT_TASKS_BY_ID =
+                "select * from task where project_id = ?";
+        return jdbcTemplate.query(SELECT_ALL_PROJECT_TASKS_BY_ID, taskRowMapper, projectId);
+    }
+
+    public void markTaskAsDone(int taskId){
+        //language=sql
+        final String MARK_TASK_AS_DONE = "update task set is_done = true where id = ?";
+        jdbcTemplate.update(MARK_TASK_AS_DONE, taskId);
     }
 }

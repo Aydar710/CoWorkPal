@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -34,6 +35,33 @@
 
     </div>
 </nav>
+
+<div class="jumbotron">
+    <div class="container">
+        <h3>Участники проекта</h3>
+        <div>
+            <a href="/addMember" class="btn btn-primary" role="button">Добавить</a>
+        </div>
+    </div>
+</div>
+
+<c:set var="members" scope="request" value="${members}"/>
+<div class="container-fluid col-md-3" id="table">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Участники</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${members}" var="member">
+            <tr>
+                <td>${member.name}</td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

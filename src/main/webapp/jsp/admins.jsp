@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <title>Администраторы</title>
     <title>Title</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -26,50 +27,42 @@
 
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Заявки</a></li>
-                <li><a href="/startProject">Начать проект</a></li>
+                <li><a href="/#">Задачи</a></li>
+                <li><a href="/members">Участники</a></li>
+                <li><a href="/admins">Администраторы</a></li>
                 <li><a href="/usersProjects">Мои проекты</a></li>
             </ul>
         </div>
-
     </div>
 </nav>
-<div class="jumbotron">
-    <div class="container">
-        <h3>Мои проекты</h3>
-    </div>
+
+<br><br><br><br><br>
+<div class="container">
+    <form role="form" method="post" class="col-md-3">
+        <div class="form-group">
+            <label for="admin">Добавить менеджера</label>
+            <input type="text" class="form-control" name="adminsEmail" placeholder="Введите Email" id="admin">
+        </div>
+        <input type="submit" class="btn btn-primary" value="Добавить менеджера в проект">
+    </form>
 </div>
 
-
-
-<c:set var="projects" scope="request" value="${projects}"/>
-<div class="container-fluid col-md-3">
-    <table class="table table-hover">
+<c:set var="admins" scope="request" value="${admins}"/>
+<div class="container-fluid col-md-3" id="table">
+    <table class="table">
         <thead>
         <tr>
-            <th>Имя проекта</th>
+            <th>Менеджеры</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${projects}" var="project">
+        <c:forEach items="${admins}" var="admin">
             <tr>
-                <%--TODO передать id проекта--%>
-                <td><a href="/admin_projectInfoTasks">${project.name}</a></td>
+                <td>${admin.name}</td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
-
-
 </div>
-
-<%--<div class="container-fluid">
-    <h3>3 различных блока</h3>
-    <div class="row">
-        <div class="col-md-4" style="background-color: #ff9999">Left</div>
-        <div class="col-md-4" style="background-color: #99CCFF">Middle</div>
-        <div class="col-md-4" style="background-color: #00CC99">Right</div>
-    </div>
-</div>--%>
 </body>
 </html>
