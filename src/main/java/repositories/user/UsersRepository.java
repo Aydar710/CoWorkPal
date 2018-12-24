@@ -29,7 +29,6 @@ public class UsersRepository implements IUsersRepository {
                 .role(role)
                 .build();
     };
-
     @Override
     public List<User> findAll() {
         //language=sql

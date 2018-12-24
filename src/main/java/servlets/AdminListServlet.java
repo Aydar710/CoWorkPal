@@ -1,5 +1,6 @@
 package servlets;
 
+import jdk.nashorn.internal.ir.RuntimeNode;
 import models.User;
 import repositories.DataSourceSingleton;
 import repositories.project.ProjectReposiory;
@@ -7,11 +8,13 @@ import repositories.user.UsersRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 @WebServlet("/admins")
 public class AdminListServlet extends HttpServlet {
@@ -22,9 +25,12 @@ public class AdminListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO достать id проекта из cookie
-        int projectId = 1;
+        int projectId = Helper.getProjectIdFromCookie(request);
         ArrayList<User> projectAdmins = (ArrayList<User>) projectReposiory.getAllAdmins(projectId);
         request.setAttribute("admins", projectAdmins);
+        int userId = Helper.getUserIdByCookie(request);
+        User user = usersRepository.find(userId);
+        request.setAttribute("role", user.getRole().name());
         request.getRequestDispatcher("jsp/admins.jsp").forward(request, response);
     }
 
@@ -32,7 +38,7 @@ public class AdminListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Добавление админа в проект
         //TODO достать id проекта из cookie
-        int projectId = 1;
+        int projectId = Helper.getProjectIdFromCookie(request);
         User admin = usersRepository.findByEmail(request.getParameter("adminsEmail"));
         if (admin != null)
             projectReposiory.addAdminToProject(admin.getId(), projectId);
@@ -44,4 +50,6 @@ public class AdminListServlet extends HttpServlet {
         projectReposiory = new ProjectReposiory(DataSourceSingleton.getDataSource());
         usersRepository = new UsersRepository(DataSourceSingleton.getDataSource());
     }
+
+
 }

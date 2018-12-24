@@ -2,7 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Проекты</title>
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -38,26 +39,25 @@
 
     </div>
 </nav>
+
 <div class="jumbotron">
     <div class="container">
-        <h3>Мои проекты</h3>
+        <h3>Проекты</h3>
     </div>
 </div>
 
-
-<c:set var="projects" scope="request" value="${projects}"/>
+<c:set var="projects" scope="request" value="${membersProjects}"/>
 <div class="container-fluid col-md-3">
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Имя проекта</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${projects}" var="project">
             <tr>
-                    <%--TODO передать id проекта--%>
-                    <td><a onclick="onClick(${project.id})" href="/projectInfoTasks">${project.name}</a></td>
+                <td><a onclick="onClick(${project.id})" href="/projectInfoTasks">${project.name}</a></td>
             </tr>
         </c:forEach>
         </tbody>
@@ -76,13 +76,5 @@
     }
 </script>
 
-<%--<div class="container-fluid">
-    <h3>3 различных блока</h3>
-    <div class="row">
-        <div class="col-md-4" style="background-color: #ff9999">Left</div>
-        <div class="col-md-4" style="background-color: #99CCFF">Middle</div>
-        <div class="col-md-4" style="background-color: #00CC99">Right</div>
-    </div>
-</div>--%>
 </body>
 </html>

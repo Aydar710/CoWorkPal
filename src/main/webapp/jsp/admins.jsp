@@ -27,7 +27,7 @@
 
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/#">Задачи</a></li>
+                <li><a href="/tasks">Задачи</a></li>
                 <li><a href="/members">Участники</a></li>
                 <li><a href="/admins">Администраторы</a></li>
                 <li><a href="/usersProjects">Мои проекты</a></li>
@@ -37,15 +37,19 @@
 </nav>
 
 <br><br><br><br><br>
-<div class="container">
-    <form role="form" method="post" class="col-md-3">
-        <div class="form-group">
-            <label for="admin">Добавить менеджера</label>
-            <input type="text" class="form-control" name="adminsEmail" placeholder="Введите Email" id="admin">
-        </div>
-        <input type="submit" class="btn btn-primary" value="Добавить менеджера в проект">
-    </form>
-</div>
+<c:set var="role" scope="request" value="${role}"/>
+<c:if test="${role eq 'Admin'}">
+    <div class="container">
+        <form role="form" method="post" class="col-md-3">
+            <div class="form-group">
+                <label for="admin">Добавить менеджера</label>
+                <input type="text" class="form-control" name="adminsEmail" placeholder="Введите Email" id="admin">
+            </div>
+            <input type="submit" class="btn btn-primary" value="Добавить менеджера в проект">
+        </form>
+    </div>
+</c:if>
+
 
 <c:set var="admins" scope="request" value="${admins}"/>
 <div class="container-fluid col-md-3" id="table">

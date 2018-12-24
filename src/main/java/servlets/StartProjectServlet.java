@@ -1,9 +1,11 @@
 package servlets;
 
 import models.Project;
+import models.Task;
 import models.User;
 import repositories.DataSourceSingleton;
 import repositories.project.ProjectReposiory;
+import repositories.task.TaskRepository;
 import repositories.user.UsersRepository;
 import services.project.ProjectService;
 
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @WebServlet("/startProject")
 public class StartProjectServlet extends HttpServlet {
@@ -21,6 +24,7 @@ public class StartProjectServlet extends HttpServlet {
     private UsersRepository usersRepository;
     private ProjectReposiory projectReposiory;
     private ProjectService projectService;
+    private TaskRepository taskRepository;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,7 +53,17 @@ public class StartProjectServlet extends HttpServlet {
 
         request.setAttribute("name", projectName);
 
-        request.getRequestDispatcher("jsp/project.jsp").forward(request, response);
+        //Redirect на страничку проекта
+        Project addedProject = projectReposiory.findProjectByNameAndMainAdminId(project.getName(), mainAdmin.getId());
+        ArrayList<Task> allTasks = (ArrayList<Task>) taskRepository.getAllNotActiveTasks(addedProject.getId());
+        request.setAttribute("tasks", allTasks);
+        request.setAttribute("projectName", addedProject.getName());
+
+        userId = Helper.getUserIdByCookie(request);
+        User currentUser = usersRepository.find(userId);
+        String role = currentUser.getRole().name();
+        request.setAttribute("role", role);
+        request.getRequestDispatcher("jsp/projectInfoTasks.jsp").forward(request, response);
 
     }
 
@@ -59,5 +73,6 @@ public class StartProjectServlet extends HttpServlet {
         usersRepository = new UsersRepository(DataSourceSingleton.getDataSource());
         projectReposiory = new ProjectReposiory(DataSourceSingleton.getDataSource());
         projectService = new ProjectService(projectReposiory);
+        taskRepository = new TaskRepository(DataSourceSingleton.getDataSource());
     }
 }

@@ -21,6 +21,4 @@ public class ProjectService {
         usersRepository.changeRoleToAdmin(project.getMainAdmin().getId());
         projectReposiory.save(project);
     }
-
-
 }

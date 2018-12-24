@@ -56,4 +56,12 @@ public class TaskRepository implements ITaskRepository {
         final String MARK_TASK_AS_DONE = "update task set is_done = true where id = ?";
         jdbcTemplate.update(MARK_TASK_AS_DONE, taskId);
     }
+
+    public List<Task> getAllNotActiveTasks(int projectId){
+        //language=sql
+        final String SELECT_ALL_DONE_TASKS =
+                "select * from task where project_id = ? and is_done = false";
+
+        return jdbcTemplate.query(SELECT_ALL_DONE_TASKS, taskRowMapper, projectId);
+    }
 }

@@ -38,7 +38,8 @@ public class SignInServlet extends HttpServlet {
             User currentUser = usersRepository.findByEmail(form.getEmail());
             Cookie cookieUserId = new Cookie("userId", String.valueOf(currentUser.getId()));
             resp.addCookie(cookieUserId);
-            req.getRequestDispatcher("jsp/usersPage.jsp").forward(req, resp);
+           // req.getRequestDispatcher("jsp/usersPage.jsp").forward(req, resp);
+            resp.sendRedirect("/usersProjects");
         } else
             resp.sendRedirect("/signIn");
     }

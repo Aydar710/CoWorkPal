@@ -25,8 +25,10 @@
 
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Заявки</a></li>
+                <li><a href="/invite">Заявки</a></li>
                 <li><a href="/startProject">Начать проект</a></li>
+                <li><a href="/usersProjects">Мои проекты</a></li>
+                <li><a href="/membersProjects">Проекты</a></li>
             </ul>
         </div>
 

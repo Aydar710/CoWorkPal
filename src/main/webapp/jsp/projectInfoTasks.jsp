@@ -34,26 +34,34 @@
 
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/#">Задачи</a></li>
+                <li><a href="/tasks">Задачи</a></li>
                 <li><a href="/members">Участники</a></li>
                 <li><a href="/admins">Администраторы</a></li>
                 <li><a href="/usersProjects">Мои проекты</a></li>
             </ul>
         </div>
-
     </div>
 </nav>
 
-<br><br><br><br><br>
-<div class="container">
-    <form role="form" method="post" class="col-md-3">
-        <div class="form-group">
-            <label for="task">Задача</label>
-            <input type="text" class="form-control" name="task" placeholder="Введите задачу" id="task">
-        </div>
-        <input type="submit" class="btn btn-primary" value="Добавить задачу">
-    </form>
+<div class="jumbotron">
+    <div class="container">
+        <h3>${projectName}</h3>
+    </div>
 </div>
+
+<c:set var="role" scope="request" value="${role}"/>
+<c:if test="${role eq 'Admin'}">
+    <div class="container">
+        <form role="form" method="post" class="col-md-3">
+            <div class="form-group">
+                <label for="task">Задача</label>
+                <input type="text" class="form-control" name="task" placeholder="Введите задачу" id="task">
+            </div>
+            <input type="submit" class="btn btn-primary" value="Добавить задачу">
+        </form>
+    </div>
+</c:if>
+
 
 <c:set var="tasks" scope="request" value="${tasks}"/>
 <div class="container-fluid col-md-3" id="table">
@@ -87,35 +95,14 @@
                 taskId: taskId
             }
         }).done(function () {
-            /*let contentTableHTML = "<table class='table'";
-            contentTableHTML += "<thead>";
-            contentTableHTML += "<tr>" +
-                "<th>Задачи</th>" +
-                "</tr>";
-            contentTableHTML += "</thead>";
-
-            for (let i = 0; i < data.length; i++) {
-                contentTableHTML += "<tr>";
-                contentTableHTML += "<td>" + data[i].task + "</td>";
-                contentTableHTML += "<td>";
-                contentTableHTML += "<button type=\"button\" class=\"btn btn-success\" id=\"
-            ${task.id}\"\n" +
-                    "onclick=\"accept(
-            ${task.id}, this.id)\">Done\n" +
-                    "</button>";
-                contentTableHTML += "</td>";
-                contentTableHTML += "</tr>";
-            }
-            contentTableHTML += "</table>";
-            let contentTableDiv = document.getElementById("table");
-            contentTableDiv.innerHTML = contentTableHTML;*/
             //document.getElementById(elementId).style.backgroundColor ='red';
-            document.getElementById(elementId).textContent='Done'
+            document.getElementById(elementId).textContent = 'Done'
 
         }).fail(function () {
             alert("fail");
         })
     }
+
 </script>
 
 </body>

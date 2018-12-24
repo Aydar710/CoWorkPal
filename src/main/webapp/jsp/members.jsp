@@ -20,6 +20,11 @@
 </head>
 <body>
 
+
+
+<%--<c:set var="role" scope="request" value="${role}"/>
+&lt;%&ndash;<c:if test="${role eq 'Admin'}">&ndash;%&gt;
+&lt;%&ndash;</c:if>&ndash;%&gt;--%>
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -28,22 +33,25 @@
 
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#">Участники</a></li>
-                <li><a href="/startProject">Задачи</a></li>
+                <li><a href="/tasks">Задачи</a></li>
+                <li><a href="/members">Участники</a></li>
+                <li><a href="/admins">Администраторы</a></li>
+                <li><a href="/usersProjects">Мои проекты</a></li>
             </ul>
         </div>
 
     </div>
 </nav>
-
 <div class="jumbotron">
     <div class="container">
         <h3>Участники проекта</h3>
-        <div>
-            <a href="/addMember" class="btn btn-primary" role="button">Добавить</a>
-        </div>
+    </div>
+
+    <div class="container">
+        <a href="/addMember" class="btn btn-primary" role="button">Добавить</a>
     </div>
 </div>
+
 
 <c:set var="members" scope="request" value="${members}"/>
 <div class="container-fluid col-md-3" id="table">

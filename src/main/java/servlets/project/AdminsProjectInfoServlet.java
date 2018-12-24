@@ -2,8 +2,12 @@ package servlets.project;
 
 import models.Project;
 import models.Task;
+import models.User;
 import repositories.DataSourceSingleton;
+import repositories.project.ProjectReposiory;
 import repositories.task.TaskRepository;
+import repositories.user.UsersRepository;
+import servlets.Helper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,24 +17,32 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet("/admin_projectInfoTasks")
+@WebServlet("/projectInfoTasks")
 public class AdminsProjectInfoServlet extends HttpServlet {
 
-    TaskRepository taskRepository;
+    private TaskRepository taskRepository;
+    private ProjectReposiory projectReposiory;
+    private UsersRepository usersRepository;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //TODO получить id проекта и сохранить в куках
-        int projectId = 1;
-        ArrayList<Task> allTasks = (ArrayList<Task>) taskRepository.getAllByProjectId(projectId);
+        int projectId = Helper.getProjectIdFromCookie(request);
+        ArrayList<Task> allTasks = (ArrayList<Task>) taskRepository.getAllNotActiveTasks(projectId);
         request.setAttribute("tasks", allTasks);
-        request.getRequestDispatcher("jsp/admin_projectInfoTasks.jsp").forward(request, response);
+        Project project = projectReposiory.find(projectId);
+        request.setAttribute("projectName", project.getName());
+
+        int userId = Helper.getUserIdByCookie(request);
+        User currentUser = usersRepository.find(userId);
+        String role = currentUser.getRole().name();
+        request.setAttribute("role", role);
+        request.getRequestDispatcher("jsp/projectInfoTasks.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO получить id проекта из куков
-        int projectid = 1;
+        int projectid = Helper.getProjectIdFromCookie(request);
         String taskText = request.getParameter("task");
 
         Project project = Project.builder()
@@ -43,11 +55,13 @@ public class AdminsProjectInfoServlet extends HttpServlet {
                 .build();
 
         taskRepository.save(task);
-        request.getRequestDispatcher("jsp/admin_projectInfoTasks.jsp").forward(request, response);
+        request.getRequestDispatcher("jsp/projectInfoTasks.jsp").forward(request, response);
     }
 
     @Override
     public void init() throws ServletException {
         taskRepository = new TaskRepository(DataSourceSingleton.getDataSource());
+        projectReposiory = new ProjectReposiory(DataSourceSingleton.getDataSource());
+        usersRepository = new UsersRepository(DataSourceSingleton.getDataSource());
     }
 }

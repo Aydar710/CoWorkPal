@@ -84,20 +84,36 @@ public class ProjectReposiory implements IProjectRepository {
         }
     }
 
-    public List<Project> getAllUsersProjects(int userId) {
+    public List<Project> getAllAdminsProjects(int userId) {
         //language=sql
-        final String SELECT_ALL_USERS_PROJECTS =
-                "select * from project where main_admin = ?";
+        /*final String SELECT_ALL_USERS_PROJECTS =
+                "select distinct project.* from project, user_project where main_admin = ? or " +
+                        "user_project.user_id = ? and user_project.project_id = project.id";*/
 
-        return jdbcTemplate.query(SELECT_ALL_USERS_PROJECTS, projectRowMapper, userId);
+        //language=sql
+        final String SELECT_ALL_MAIN_ADMIN_PROJECTS = "select * from project where main_admin = ?";
+        //language=sql
+        final String SELECT_ALL_PROJECTS_WHERE_USER_IS_ADMIN =
+                "select project.* from project, admin_project where admin_project.admin_id = ?" +
+                        "and project_id = project.id";
+        List<Project> mainAdminsProjects = jdbcTemplate.query(SELECT_ALL_MAIN_ADMIN_PROJECTS, projectRowMapper, userId);
+        List<Project> adminsProjects = jdbcTemplate.query(SELECT_ALL_PROJECTS_WHERE_USER_IS_ADMIN, projectRowMapper, userId);
+        adminsProjects.addAll(mainAdminsProjects);
+
+        return adminsProjects;
     }
 
     public List<User> getAllAdmins(int projectId) {
         //language=sql
         final String SELECT_ALL_PROJECT_ADMINS =
                 "select users.* from admin_project, users where project_id = ? and admin_id = users.id";
-        return jdbcTemplate.query(SELECT_ALL_PROJECT_ADMINS, userRowMapper, projectId);
-
+        //language=sql
+        final String SELECT_PROJECTS_MAIN_ADMIN =
+                "select users.* from project, users where project.id = ? and project.main_admin = users.id";
+        List<User> mainAdmin = jdbcTemplate.query(SELECT_PROJECTS_MAIN_ADMIN, userRowMapper, projectId);
+        List<User> projectAdmins = jdbcTemplate.query(SELECT_ALL_PROJECT_ADMINS, userRowMapper, projectId);
+        projectAdmins.addAll(mainAdmin);
+        return projectAdmins;
     }
 
     public void addAdminToProject(int adminId, int projectId) {
@@ -111,5 +127,21 @@ public class ProjectReposiory implements IProjectRepository {
         final String SET_USER_AS_ADMIN =
                 "update users set is_admin = true where id = ?";
         jdbcTemplate.update(SET_USER_AS_ADMIN, adminId);
+    }
+
+    public List<Project> getAllMembersProjects(int memberId) {
+        //language=sql
+        final String SELECT_ALL_MEMBERS_PROJECTS =
+                "select project.* from user_project, project where user_id = ? and " +
+                        "project_id = project.id";
+        return jdbcTemplate.query(SELECT_ALL_MEMBERS_PROJECTS, projectRowMapper, memberId);
+    }
+
+    public Project findProjectByNameAndMainAdminId(String projectName, int mainAdminId) {
+        //language=sql
+        final String SELECT_PROJECT_BY_NAME_AND_MAINADMIN_ID =
+                "select * from project where name = ? and main_admin = ?";
+
+        return jdbcTemplate.queryForObject(SELECT_PROJECT_BY_NAME_AND_MAINADMIN_ID, projectRowMapper, projectName, mainAdminId);
     }
 }

@@ -4,6 +4,8 @@ package servlets.project;
 import models.User;
 import repositories.DataSourceSingleton;
 import repositories.project.ProjectReposiory;
+import repositories.user.UsersRepository;
+import servlets.Helper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class MembersServlet extends HttpServlet {
 
     private ProjectReposiory projectReposiory;
+    private UsersRepository usersRepository;
 
 
     @Override
@@ -26,6 +29,9 @@ public class MembersServlet extends HttpServlet {
         int projectId = 1;
         ArrayList<User> projectMembers = (ArrayList<User>) projectReposiory.getAllProjectMembers(projectId);
         request.setAttribute("members", projectMembers);
+        int userId = Helper.getUserIdByCookie(request);
+        User user = usersRepository.find(userId);
+        request.setAttribute("role", user.getRole().name());
         request.getRequestDispatcher("jsp/members.jsp").forward(request, response);
     }
 
@@ -37,5 +43,6 @@ public class MembersServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         projectReposiory = new ProjectReposiory(DataSourceSingleton.getDataSource());
+        usersRepository = new UsersRepository(DataSourceSingleton.getDataSource());
     }
 }

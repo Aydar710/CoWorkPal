@@ -1,8 +1,10 @@
 package servlets;
 
+import models.Invite;
 import models.Project;
 import models.User;
 import repositories.DataSourceSingleton;
+import repositories.invite.InviteRepository;
 import repositories.project.ProjectReposiory;
 import repositories.user.UsersRepository;
 import services.project.ProjectService;
@@ -20,6 +22,7 @@ public class AddMemberServlet extends HttpServlet {
     private UsersRepository usersRepository;
     private ProjectReposiory projectReposiory;
     private ProjectService projectService;
+    private InviteRepository inviteRepository;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,12 +34,16 @@ public class AddMemberServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userEmail = request.getParameter("usersEmail");
         User user = usersRepository.findByEmail(userEmail);
+        int projectId =  Helper.getProjectIdFromCookie(request);
+        Project project = projectReposiory.find(projectId);
 
-        //TODO достать проект из куков
-        Project project = Project.builder()
-                .id(1)
+        Invite invite = Invite.builder()
+                .project(project)
+                .user(user)
                 .build();
-        projectReposiory.addMemberToProject(user, project);
+        inviteRepository.save(invite);
+
+        //projectReposiory.addMemberToProject(user, project);
     }
 
     @Override
@@ -44,6 +51,7 @@ public class AddMemberServlet extends HttpServlet {
         usersRepository = new UsersRepository(DataSourceSingleton.getDataSource());
         projectReposiory = new ProjectReposiory(DataSourceSingleton.getDataSource());
         projectService = new ProjectService(projectReposiory);
+        inviteRepository = new InviteRepository(DataSourceSingleton.getDataSource());
     }
 
 }
