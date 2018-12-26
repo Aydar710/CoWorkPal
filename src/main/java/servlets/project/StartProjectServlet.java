@@ -1,4 +1,4 @@
-package servlets;
+package servlets.project;
 
 import models.Project;
 import models.Task;
@@ -8,6 +8,7 @@ import repositories.project.ProjectReposiory;
 import repositories.task.TaskRepository;
 import repositories.user.UsersRepository;
 import services.project.ProjectService;
+import servlets.Helper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -59,7 +60,7 @@ public class StartProjectServlet extends HttpServlet {
         request.setAttribute("tasks", allTasks);
         request.setAttribute("projectName", addedProject.getName());
 
-        userId = Helper.getUserIdByCookie(request);
+        userId = Helper.getUserIdFromCookie(request);
         User currentUser = usersRepository.find(userId);
         String role = currentUser.getRole().name();
         request.setAttribute("role", role);

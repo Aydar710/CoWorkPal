@@ -20,7 +20,7 @@ public class MembersProjectsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int memberId = Helper.getUserIdByCookie(request);
+        int memberId = Helper.getUserIdFromCookie(request);
         ArrayList<Project> membersProjects = (ArrayList<Project>) projectReposiory.getAllMembersProjects(memberId);
         request.setAttribute("membersProjects", membersProjects);
         request.getRequestDispatcher("jsp/membersProjects.jsp").forward(request, response);

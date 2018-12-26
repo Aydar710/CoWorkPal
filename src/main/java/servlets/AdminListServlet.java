@@ -1,6 +1,5 @@
 package servlets;
 
-import jdk.nashorn.internal.ir.RuntimeNode;
 import models.User;
 import repositories.DataSourceSingleton;
 import repositories.project.ProjectReposiory;
@@ -8,7 +7,6 @@ import repositories.user.UsersRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,11 +22,10 @@ public class AdminListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //TODO достать id проекта из cookie
         int projectId = Helper.getProjectIdFromCookie(request);
         ArrayList<User> projectAdmins = (ArrayList<User>) projectReposiory.getAllAdmins(projectId);
         request.setAttribute("admins", projectAdmins);
-        int userId = Helper.getUserIdByCookie(request);
+        int userId = Helper.getUserIdFromCookie(request);
         User user = usersRepository.find(userId);
         request.setAttribute("role", user.getRole().name());
         request.getRequestDispatcher("jsp/admins.jsp").forward(request, response);

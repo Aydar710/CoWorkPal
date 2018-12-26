@@ -32,7 +32,7 @@ public class AdminsProjectInfoServlet extends HttpServlet {
         Project project = projectReposiory.find(projectId);
         request.setAttribute("projectName", project.getName());
 
-        int userId = Helper.getUserIdByCookie(request);
+        int userId = Helper.getUserIdFromCookie(request);
         User currentUser = usersRepository.find(userId);
         String role = currentUser.getRole().name();
         request.setAttribute("role", role);
@@ -41,7 +41,6 @@ public class AdminsProjectInfoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //TODO получить id проекта из куков
         int projectid = Helper.getProjectIdFromCookie(request);
         String taskText = request.getParameter("task");
 

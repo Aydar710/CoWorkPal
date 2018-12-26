@@ -25,11 +25,10 @@ public class MembersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //TODO достать id проекта из куков
         int projectId = 1;
         ArrayList<User> projectMembers = (ArrayList<User>) projectReposiory.getAllProjectMembers(projectId);
         request.setAttribute("members", projectMembers);
-        int userId = Helper.getUserIdByCookie(request);
+        int userId = Helper.getUserIdFromCookie(request);
         User user = usersRepository.find(userId);
         request.setAttribute("role", user.getRole().name());
         request.getRequestDispatcher("jsp/members.jsp").forward(request, response);

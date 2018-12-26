@@ -42,8 +42,6 @@ public class AddMemberServlet extends HttpServlet {
                 .user(user)
                 .build();
         inviteRepository.save(invite);
-
-        //projectReposiory.addMemberToProject(user, project);
     }
 
     @Override

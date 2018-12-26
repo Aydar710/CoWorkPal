@@ -14,7 +14,7 @@ public class Helper {
         return -1;
     }
 
-    public static int getUserIdByCookie(HttpServletRequest request) {
+    public static int getUserIdFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("userId")) {
